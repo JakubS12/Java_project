@@ -1,0 +1,123 @@
+import java.util.Scanner;
+public class S28140_p01 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n-------------------------\nPodaj pierwsza liczbę: ");
+            int val1 = scanner.nextInt();
+            System.out.println("Podaj kolejna liczbę: ");
+            int val2 = scanner.nextInt();
+            if (val1 == 0 && val2 == 0){
+                System.out.println("-------------------------\nMiłego dnia");
+                break;
+            }
+            System.out.println("Podaj operacje : ");
+            char operacja = scanner.next().charAt(0);
+            System.out.print(val1 + " - ");
+            for (int i = 15; i >= 0; i--) {
+                if ((val1 & 0b1 << i) != 0b0)
+                    System.out.print("1");
+                else
+                    System.out.print("0");
+            }
+            System.out.println();
+            System.out.print(val2 + " - ");
+            for (int i = 15; i >= 0; i--) {
+                if ((val2 & 0b1 << i) != 0b0)
+                    System.out.print("1");
+                else
+                    System.out.print("0");
+            }
+            int wynik;
+            switch (operacja) {
+                case '+':
+                    wynik = dodawanie(val1, val2);
+
+                    System.out.println("\n-------------------------");
+                    System.out.print(wynik + " - ");
+                    for (int i = 15; i >= 0; i--) {
+                        if ((wynik & 0b1 << i) != 0b0)
+                            System.out.print("1");
+                        else
+                            System.out.print("0");
+                    }
+                    break;
+
+                case '-':
+                    wynik = odejmowanie(val1, val2);
+                    System.out.println("\n-------------------------");
+                    System.out.print(wynik + " - ");
+                    for (int i = 15; i >= 0; i--) {
+                        if ((wynik & 0b1 << i) != 0b0)
+                            System.out.print("1");
+                        else
+                            System.out.print("0");
+                    }
+                    break;
+
+                case '*':
+                    wynik = mnozenie(val1, val2);
+                    System.out.println("\n-------------------------");
+                    System.out.print(wynik + " - ");
+                    for (int i = 15; i >= 0; i--) {
+                        if ((wynik & 0b1 << i) != 0b0)
+                            System.out.print("1");
+                        else
+                            System.out.print("0");
+                    }
+                    break;
+
+                case '/':
+                    wynik = dzielenie(val1, val2);
+                    System.out.println("\n-------------------------");
+                    System.out.print(wynik + " - ");
+                    for (int i = 15; i >= 0; i--) {
+                        if ((wynik & 0b1 << i) != 0b0)
+                            System.out.print("1");
+                        else
+                            System.out.print("0");
+                    }
+                    break;
+                default:
+                    System.out.println("\nNie udalo sie wykonac operacji");
+                    wynik = 0;
+            }
+        }
+    }
+    public static int dodawanie(int val1, int val2) {
+
+        int wynik;
+        while (val2 != 0) {
+            wynik = val1 & val2;
+            val1 = val1 ^ val2;
+            val2 = wynik << 1;
+        }
+        return val1;
+    }
+    public static int odejmowanie(int val1, int val2) {
+        int wynik;
+
+        val2 = ~val2 + 1;
+        return dodawanie(val1,val2);
+    }
+    public static int mnozenie(int val1, int val2){
+        int wynik = 0;
+        while (val2 != 0){
+            if (( val2 & 1) == 1){
+                wynik =dodawanie(wynik,val1);
+            }
+            val1 = val1 << 1;
+            val2 = val2 >> 1;
+        }
+        return wynik;
+    }
+    public static int dzielenie(int val1,int val2){
+        int wynik = 0;
+        while (val1 >= val2){
+            val1 = odejmowanie(val1,val2);
+            wynik = dodawanie(wynik, 1);
+        }
+        return wynik;
+    }
+}
